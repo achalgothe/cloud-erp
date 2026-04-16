@@ -1,0 +1,14 @@
+node_modules
+dist
+.env
+.env.local
+*.log
+.DS_Store
+logs/
+uploads/
+.vscode
+.idea
+coverage
+.vs
+*.suo
+*.user

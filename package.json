@@ -1,0 +1,32 @@
+{
+  "name": "cloud-erp-system",
+  "version": "1.0.0",
+  "description": "Cloud-based Enterprise Resource Planning System",
+  "scripts": {
+    "install:all": "cd backend && npm install && cd ../frontend && npm install",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    "start:backend": "cd backend && npm start",
+    "docker:up": "docker-compose up --build",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "test": "cd backend && npm test"
+  },
+  "keywords": [
+    "erp",
+    "cloud",
+    "enterprise",
+    "nodejs",
+    "react",
+    "mongodb",
+    "express"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/cloud-erp-system.git"
+  }
+}

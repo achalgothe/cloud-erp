@@ -68,6 +68,15 @@ const Employees = () => {
     }
   };
 
+  const handleDelete = async (id) => {
+    try {
+      await hrAPI.deleteEmployee(id);
+      setEmployees((prev) => prev.filter((employee) => employee._id !== id));
+    } catch (error) {
+      console.error('Error deleting employee:', error);
+    }
+  };
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -77,10 +86,18 @@ const Employees = () => {
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          mb: 3
+        }}
+      >
         <Typography variant="h4" fontWeight="bold">
           Employees
         </Typography>
+
         <Button
           variant="contained"
           startIcon={<AddIcon />}
@@ -104,8 +121,17 @@ const Employees = () => {
               <TableCell><strong>Actions</strong></TableCell>
             </TableRow>
           </TableHead>
+
           <TableBody>
-            {employees.length === 0 ? (
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={8} align="center" sx={{ py: 4 }}>
+                  <Typography variant="body2" color="text.secondary">
+                    Loading employees...
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            ) : employees.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={8} align="center" sx={{ py: 4 }}>
                   <Typography variant="body2" color="text.secondary">
@@ -115,8 +141,8 @@ const Employees = () => {
               </TableRow>
             ) : (
               employees.map((employee) => (
-                <TableRow key={employee.id}>
-                  <TableCell>{employee.employeeId || `EMP${employee.id}`}</TableCell>
+                <TableRow key={employee._id}>
+                  <TableCell>{employee.employeeId || `EMP-${employee._id?.slice(-5)}`}</TableCell>
                   <TableCell>
                     {employee.user?.firstName || 'N/A'} {employee.user?.lastName || ''}
                   </TableCell>
@@ -131,13 +157,20 @@ const Employees = () => {
                     />
                   </TableCell>
                   <TableCell>
-                    {employee.dateOfJoining ? new Date(employee.dateOfJoining).toLocaleDateString() : 'N/A'}
+                    {employee.dateOfJoining
+                      ? new Date(employee.dateOfJoining).toLocaleDateString()
+                      : 'N/A'}
                   </TableCell>
                   <TableCell>
                     <IconButton size="small" color="primary">
                       <EditIcon />
                     </IconButton>
-                    <IconButton size="small" color="error">
+
+                    <IconButton
+                      size="small"
+                      color="error"
+                      onClick={() => handleDelete(employee._id)}
+                    >
                       <DeleteIcon />
                     </IconButton>
                   </TableCell>
@@ -148,9 +181,14 @@ const Employees = () => {
         </Table>
       </TableContainer>
 
-      {/* Add Employee Dialog */}
-      <Dialog open={openDialog} onClose={() => setOpenDialog(false)} maxWidth="sm" fullWidth>
+      <Dialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        maxWidth="sm"
+        fullWidth
+      >
         <DialogTitle>Add New Employee</DialogTitle>
+
         <form onSubmit={handleSubmit}>
           <DialogContent>
             <TextField
@@ -162,6 +200,7 @@ const Employees = () => {
               margin="normal"
               required
             />
+
             <TextField
               fullWidth
               label="Department"
@@ -171,6 +210,7 @@ const Employees = () => {
               margin="normal"
               required
             />
+
             <TextField
               fullWidth
               label="Designation"
@@ -180,6 +220,7 @@ const Employees = () => {
               margin="normal"
               required
             />
+
             <TextField
               fullWidth
               label="Date of Joining"
@@ -191,6 +232,7 @@ const Employees = () => {
               InputLabelProps={{ shrink: true }}
               required
             />
+
             <TextField
               fullWidth
               select
@@ -207,9 +249,12 @@ const Employees = () => {
               <option value="intern">Intern</option>
             </TextField>
           </DialogContent>
+
           <DialogActions>
             <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
-            <Button type="submit" variant="contained">Add Employee</Button>
+            <Button type="submit" variant="contained">
+              Add Employee
+            </Button>
           </DialogActions>
         </form>
       </Dialog>
